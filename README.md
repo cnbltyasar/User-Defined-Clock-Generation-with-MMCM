@@ -24,3 +24,6 @@ Dynamic Frequency Setting: Accepts a new clock frequency input (up to 3 digits) 
 MMCM Parameter Calculation: Uses a custom rounding function and arithmetic to determine the divider and multiplier values.
 Status Feedback: Displays register values and lock status to help verify successful configuration.
 Memory-Mapped I/O: Interacts directly with the MMCM registers via Xil_Out32() and Xil_In32() functions.
+
+
+![image](https://github.com/user-attachments/assets/ab5fbf9f-e5be-4130-ae8c-5e9c6a235253)
