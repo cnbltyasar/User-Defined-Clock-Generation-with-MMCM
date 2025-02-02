@@ -1,38 +1,67 @@
 # User-Defined-Clock-Generation-with-MMCM
 
-This project implements a user-defined clock generator using an MMCM (Mixed-Mode Clock Manager) on a Xilinx FPGA. The design uses a UARTLite interface to receive a frequency value (in MHz) from the user and then calculates the clock parameters (such as divider and multiplier values) needed to configure the MMCM. The calculated parameters are then written to memory-mapped registers to set the clock frequency. The project also demonstrates reading back the lock status of the MMCM.
+Bu projede, UART aracılığıyla kullanıcıdan istenen frekans değeri (MHz cinsinden) alınmakta ve bu değere ulaşmak için gerekli MMCM parametreleri (divider ve multiplier gibi) hesaplanmaktadır. Hesaplanan bu parametreler, Clock Wizard tarafından oluşturulan MMCM yapılandırma kayıtlarına yazılmaktadır.
+Ek olarak, ILA kullanılarak FPGA içindeki sinyal akışları ve MMCM yapılandırmasının güncel durumu sürekli izlenmekte, böylece UART üzerinden gönderilen frekans değerine ulaşılıp ulaşılmadığı gözlemlenebilmektedir.
 
-Table of Contents
-Overview
-Features
-Folder Structure
-Build and Run
-Source Files Description
-License
-Overview
-The project allows the user to input a desired clock frequency via UART. The software then:
+Özellikler
+UART Tabanlı Kontrol: Menü tabanlı arayüz ile kullanıcı frekans değeri ayarlayabilir.
+Dinamik Frekans Ayarı: Kullanıcı tarafından girilen yeni frekans değerine göre MMCM parametreleri (divider, multiplier, vs.) hesaplanır ve uygulanır.
+Clock Wizard Entegrasyonu: Projede bulunan Clock Wizard, MMCM yapılandırmasını gerçekleştirmek için kullanılır.
+ILA ile Gerçek Zamanlı İzleme: ILA (Integrated Logic Analyzer) kullanılarak FPGA içindeki sinyaller ve MMCM yapılandırması sürekli olarak izlenir, böylece ayarlanan frekansa ulaşılıp ulaşılmadığı gözlemlenir.
+Derleme ve Çalıştırma
+Ortamı Ayarlayın:
 
-Reads the frequency value from UART.
-Computes the required MMCM parameters (dividers and multipliers) using custom calculations.
-Writes the calculated parameters to memory-mapped registers (simulated or actual MMCM registers).
-Verifies and displays the achieved frequency and lock status via UART.
-This solution is built on top of Xilinx drivers (such as xparameters.h, xuartlite_l.h, and xil_io.h) and can be integrated into an FPGA design using Xilinx Vivado along with SDK/Vitis for software development.
+FPGA kartınızın bağlantılarını kontrol edin.
+Xilinx sürücü ve kütüphanelerinin (UARTLite, I/O, vb.) kurulu olduğundan emin olun.
+xparameters.h dosyasının FPGA ortamınıza uygun olarak ayarlandığını doğrulayın.
+Projeyi Derleyin:
+Xilinx SDK/Vitis ortamında yeni bir uygulama projesi oluşturun ve src klasöründeki kaynak dosyalarını projeye ekleyin.
 
-Features
-UART-Based Control: A simple menu-driven interface allows the user to select clock configuration options.
-Dynamic Frequency Setting: Accepts a new clock frequency input (up to 3 digits) and recalculates MMCM parameters accordingly.
-MMCM Parameter Calculation: Uses a custom rounding function and arithmetic to determine the divider and multiplier values.
-Status Feedback: Displays register values and lock status to help verify successful configuration.
-Memory-Mapped I/O: Interacts directly with the MMCM registers via Xil_Out32() and Xil_In32() functions.
+FPGA’ya Programlayın:
 
+Vivado Hardware Manager veya Xilinx SDK/Vitis kullanarak FPGA’ya bit dosyasını yükleyin.
+Clock Wizard konfigürasyonunun doğru çalıştığından emin olun.
+Uygulamayı Çalıştırın:
 
+FPGA’nızın UART portuna bağlı bir terminal programı (Tera Term, PuTTY, vs.) açın.
+Ekranda beliren menüden frekans değerini girin.
+ILA aracı ile FPGA içindeki sinyallerin ve MMCM yapılandırma durumunun, ayarlanan frekansa ulaşılıp ulaşılmadığını sürekli olarak gözlemleyin.
+Kaynak Dosya Açıklamaları
+main.c:
+
+main() fonksiyonu ve kullanıcı arayüzünü içerir.
+Menü sistemini yönetir; kullanıcının frekans girişi yapması, ayarlanan frekans değerinin hesaplanması ve MMCM yapılandırma işlemleri burada gerçekleşir.
+ILA kullanılarak MMCM durumunun izlenebilmesi için gerekli debug/izleme sinyalleri sağlanır.
+clock_generation.c (Opsiyonel):
+
+calculateClockParameters() fonksiyonu ile girilen frekans değeri üzerinden gerekli parametreleri (divider, multiplier, fractional kısımlar) hesaplar.
+custom_round() fonksiyonu ile yuvarlama işlemleri gerçekleştirilir.
+Hesaplanan parametreler, Clock Wizard tarafından üretilen MMCM yapılandırma kayıtlarına yazılır.
+clock_generation.h (Opsiyonel):
+
+clock_generation.c dosyasında kullanılan fonksiyon prototiplerini ve makro tanımlamalarını içerir.
+xparameters.h:
+
+Xilinx tasarım aracından (Vivado) üretilen ve donanım yapılandırması bilgilerini içeren dosyadır.
+ila/ila_config.xdc:
+
+ILA için gerekli pin atama ve konfigürasyon bilgilerini içerir.
+Vivado projesinde ILA bloğu ekleyip, sinyal izleme ayarlarını bu dosya üzerinden gerçekleştirebilirsiniz.
+Ek Açıklamalar
+Clock Wizard Kullanımı:
+Projede yer alan Clock Wizard, MMCM yapılandırmasını gerçekleştirmek üzere kullanılır. UART üzerinden girilen frekans değeri doğrultusunda MMCM ayarları hesaplanır ve uygulanır. Bu sayede, FPGA içerisindeki saat frekansı dinamik olarak değiştirilir.
+
+ILA ile İzleme:
+ILA (Integrated Logic Analyzer) kullanılarak, MMCM’nin ve ilgili sinyal akışının gerçek zamanlı olarak izlenmesi sağlanır. Böylece, UART üzerinden ayarlanan frekans değerine ulaşılıp ulaşılmadığı doğrudan gözlemlenebilir. ILA, Vivado içinde konfigüre edilir ve izlemek istediğiniz sinyalleri seçerek değişimleri takip edebilirsiniz.
+
+Bellek Erişimli Giriş/Çıkış: MMCM kayıtları, Xilinx sürücüleri (Xil_In32 ve Xil_Out32) kullanılarak doğrudan erişilir.
 ![image](https://github.com/user-attachments/assets/ab5fbf9f-e5be-4130-ae8c-5e9c6a235253)
 
 ![WhatsApp Görsel 2024-08-30 saat 12 17 34_c1b9eb58](https://github.com/user-attachments/assets/85a541f7-bcd2-4e16-94f8-8e3a096ad0ac)
 
 ![WhatsApp Görsel 2024-08-30 saat 12 16 00_0b45835d](https://github.com/user-attachments/assets/e1aad15c-f255-4151-9e0c-40b9f66e5b0d)
 
-UART Adresses: 
+#UART Addresses: 
 
 ![WhatsApp Görsel 2024-08-30 saat 12 20 21_c1502ef6](https://github.com/user-attachments/assets/f82f48cd-0815-43aa-80a5-f5f1142a357a)
 
