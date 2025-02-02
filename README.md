@@ -4,10 +4,14 @@ Bu projede, UART aracılığıyla kullanıcıdan istenen frekans değeri (MHz ci
 Ek olarak, ILA kullanılarak FPGA içindeki sinyal akışları ve MMCM yapılandırmasının güncel durumu sürekli izlenmekte, böylece UART üzerinden gönderilen frekans değerine ulaşılıp ulaşılmadığı gözlemlenebilmektedir.
 
 # Özellikler
-# UART Tabanlı Kontrol: Menü tabanlı arayüz ile kullanıcı frekans değeri ayarlayabilir.
-# Dinamik Frekans Ayarı: Kullanıcı tarafından girilen yeni frekans değerine göre MMCM parametreleri (divider, multiplier, vs.) hesaplanır ve uygulanır.
-# Clock Wizard Entegrasyonu: Projede bulunan Clock Wizard, MMCM yapılandırmasını gerçekleştirmek için kullanılır.
-# ILA ile Gerçek Zamanlı İzleme: ILA (Integrated Logic Analyzer) kullanılarak FPGA içindeki sinyaller ve MMCM yapılandırması sürekli olarak izlenir, böylece ayarlanan frekansa ulaşılıp ulaşılmadığı gözlemlenir.
+# UART Tabanlı Kontrol:
+Menü tabanlı arayüz ile kullanıcı frekans değeri ayarlayabilir.
+# Dinamik Frekans Ayarı: 
+Kullanıcı tarafından girilen yeni frekans değerine göre MMCM parametreleri (divider, multiplier, vs.) hesaplanır ve uygulanır.
+# Clock Wizard Entegrasyonu:
+Projede bulunan Clock Wizard, MMCM yapılandırmasını gerçekleştirmek için kullanılır.
+# ILA ile Gerçek Zamanlı İzleme: 
+ILA (Integrated Logic Analyzer) kullanılarak FPGA içindeki sinyaller ve MMCM yapılandırması sürekli olarak izlenir, böylece ayarlanan frekansa ulaşılıp ulaşılmadığı gözlemlenir.
 
 # Kaynak Dosya Açıklamaları
 # main.c:
